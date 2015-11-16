@@ -1,0 +1,46 @@
+# global settings
+
+[global]
+newrelic_license_key={{ nr_license }}
+poll_interval=60
+
+# logging settings
+
+[loggers]
+keys=root
+
+[handlers]
+keys=consoleHandler,fileHandler
+
+[formatters]
+keys=simpleFormatter
+
+[logger_root]
+level=DEBUG
+handlers=consoleHandler,fileHandler
+
+[handler_consoleHandler]
+class=StreamHandler
+level=DEBUG
+formatter=simpleFormatter
+args=(sys.stdout,)
+
+[handler_fileHandler]
+class=FileHandler
+level=DEBUG
+formatter=simpleFormatter
+args=('/var/log/nginx-nr-agent.log','a',)
+
+[formatter_simpleFormatter]
+format=%(asctime)s %(name)s [%(levelname)s]: %(message)s
+datefmt=
+
+# data sources settings
+{% for ds in mon_nginx_data_sources %}
+[{{ ds.src_name }}]
+name={{ ds.ds_name }}
+url={{ ds.ds_url }}
+{% if ds.ds_http_user %}http_user={{ ds.ds_http_user }}{% endif %}
+{% if ds.ds_http_pass %}http_pass={{ ds.ds_http_pass }}{% endif %}
+
+{% endfor %}

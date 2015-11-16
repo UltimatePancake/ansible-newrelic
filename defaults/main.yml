@@ -1,0 +1,49 @@
+---
+base_path: '/opt'
+newrelic_path: '{{ base_path }}/newrelic'
+
+# SERVER MONITOR VARS
+monitor_server: false
+
+mon_server_cmd:
+  - 'echo deb http://apt.newrelic.com/debian/ newrelic non-free >> /etc/apt/sources.list.d/newrelic.list'
+  - 'wget -O- https://download.newrelic.com/548C16BF.gpg | apt-key add -'
+
+mon_server_rpm: 'https://download.newrelic.com/pub/newrelic/el5/i386/newrelic-repo-5-3.noarch.rpm'
+
+# APM MONITOR VARS
+monitor_apm: false
+
+mon_apm_url: 'http://download.newrelic.com/newrelic/java-agent/newrelic-agent'
+mon_apm_version: current # See http://download.newrelic.com/newrelic/java-agent/newrelic-agent/ for other versions
+mon_apm_file: 'newrelic-java.zip'
+
+mon_apm_download: '{{ mon_apm_url }}/{{ mon_apm_version }}/{{ mon_apm_file }}'
+
+mon_apm_cmd_get: '/usr/bin/wget {{ mon_apm_download }} -P {{ base_path }}'
+
+mon_apm_jar_path: '{{ newrelic_path }}/newrelic.jar'
+
+mon_apm_appname: 'My Application'
+
+# PLUGIN MONITORS VARS
+# NGINX
+monitor_nginx: false
+
+mon_nginx_key_url: 'http://nginx.org/keys/nginx_signing.key'
+mon_nginx_key_file: '/tmp/nginx_signing.key'
+
+mon_nginx_data_sources:
+  - { src_name: 'source1', ds_name: 'examplecom', ds_url: 'http://example.com', ds_http_user: '', ds_http_pass: '' }
+
+# MYSQL
+monitor_mysql: false
+
+mon_mysql_version: '2.0.0' # See https://github.com/newrelic-platform/newrelic_mysql_java_plugin/tree/master/dist for available versions.
+mon_mysql_download_url: 'https://github.com/newrelic-platform/newrelic_mysql_java_plugin/blob/master/dist/newrelic_mysql_plugin-{{ mon_mysql_version }}.tar.gz?raw=true'
+mon_mysql_download_file: '/tmp/newrelic_mysql_plugin-{{ mon_mysql_version }}.tar.gz'
+
+mon_mysql_log_level: info
+
+mon_mysql_db_agents:
+  - { db_host: 'localhost', db_name: 'mysql', db_user: 'root', db_pass: 'toor' }

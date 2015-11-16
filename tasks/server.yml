@@ -1,0 +1,31 @@
+---
+# DEBIAN/UBUNTU TASKS
+- name: Server | Debian/Ubuntu | Add the New Relic apt repository
+  shell: '{{ item }}'
+  with_items: mon_server_cmd
+  when: ansible_pkg_mgr == 'apt'
+  tags: ['newrelic', 'newrelic_server']
+
+- name: Server | Debian/Ubuntu | Install the Server Monitor package
+  apt: name=newrelic-sysmond state=latest update_cache=yes
+  when: ansible_pkg_mgr == 'apt'
+  notify: start newrelic
+  tags: ['newrelic', 'newrelic_server']
+
+# REDHAT/CENTOS TASKS
+- name: Server | RHEL | Add the New Relic yum repository
+  yum: name='{{ mon_server_rpm }}' state=present
+  when: ansible_os_family == 'RedHat'
+  tags: ['newrelic', 'newrelic_server']
+
+- name: Server | RHEL | Install the Server Monitor package
+  yum: name=newrelic-sysmond state=latest update_cache=yes
+  when: ansible_os_family == 'RedHat'
+  notify: start newrelic
+  tags: ['newrelic', 'newrelic_server']
+
+# GENERAL TASKS
+- name: Server | Configure the Server Monitor daemon
+  shell: 'nrsysmond-config --set license_key={{ nr_license }}'
+  notify: restart newrelic
+  tags: ['newrelic', 'newrelic_server']

@@ -1,0 +1,13 @@
+{
+{% for da in mon_mysql_db_agents %}
+  "agents": [
+    {
+      "name"    : "{{ da.db_name }}",
+      "host"    : "{{ da.db_host }}",
+      "metrics" : "status,newrelic",
+      "user"    : "{{ da.db_user }}",
+      "passwd"  : "{{ da.db_pass }}"
+    }
+  ]{% if not loop.last %},{% endif %}
+{% endfor %}
+}

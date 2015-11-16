@@ -1,0 +1,32 @@
+---
+- galaxy_info:
+    author: Pier-Angelo Gaetani
+    description: "An Ansible role for installing the New Relic server, APM, MySQL and Nginx monitors"
+    company: Digital Geko
+    license: MIT
+    min_ansible_version: 1.9
+    platforms:
+      - name: Ubuntu
+        versions:
+          - lucid
+          - maverick
+          - natty
+          - oneiric
+          - precise
+          - quantal
+          - raring
+          - saucy
+          - trusty
+      - name: Debian
+          - lenny
+          - squeeze
+          - wheezy
+          - jessie
+      - name: RHEL
+          - 5
+          - 6
+          - 7
+    categories:
+      - servers
+
+-dependencies: []

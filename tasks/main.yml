@@ -1,0 +1,24 @@
+---
+- name: Ensure monitor install folder exists
+  file: path={{ newrelic_path }} state=directory
+  tags: ['newrelic']
+
+- include: server.yml
+  when: monitor_server
+  tags: ['newrelic', 'newrelic_server']
+
+- include: apm.yml
+  when: monitor_apm
+  tags: ['newrelic', 'newrelic_apm']
+
+- name: Ensure plugin install folder exists
+  file: path={{ newrelic_path }}/plugins state=directory
+  tags: ['newrelic']
+
+- include: plugin_mysql.yml
+  when: monitor_mysql
+  tags: ['newrelic', 'newrelic_mysql']
+
+- include: plugin_nginx.yml
+  when: monitor_nginx
+  tags: ['newrelic', 'newrelic_nginx']

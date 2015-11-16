@@ -1,0 +1,15 @@
+---
+- name: APM | Download the Java agent
+  shell: '{{ mon_apm_cmd_get }}'
+  tags: ['newrelic', 'newrelic_apm']
+
+- name: APM | Extract the Java agent
+  unarchive: src={{ mon_apm_file }} dest={{ base_path }}
+  tags: ['newrelic', 'newrelic_apm']
+
+- name: APM | Configure the Java agent
+  template: src=newrelic.yml.j2 dest={{ newrelic_path }}/newrelic.yml
+  tags: ['newrelic', 'newrelic_apm']
+
+- debug: msg='Remember to add the javaagent to your JVM environment variables'
+- debug: msg='-javaagent: {{ mon_apm_jar_path }}'

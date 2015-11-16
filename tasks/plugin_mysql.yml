@@ -1,0 +1,18 @@
+---
+- name: MySQL | Download plugin
+  get_url: url={{ mon_mysql_download_url }} dest={{ mon_mysql_download_file }}
+  tags: ['newrelic', 'newrelic_mysql']
+
+- name: MySQL | Extract plugin
+  unarchive: src={{ mon_mysql_download_file }} dest={{ newrelic_path }}/plugins copy=no
+  tags: ['newrelic', 'newrelic_mysql']
+
+- name: MySQL | Configure plugin (NewRelic connection)
+  template: src=newrelic.json.j2 dest='/opt/newrelic/plugins/newrelic_mysql_plugin-{{ mon_mysql_version }}/config/newrelic.json'
+  tags: ['newrelic', 'newrelic_mysql']
+
+- name: MySQL | Configure plugin (MySQL connection)
+  template: src=plugin.json.j2 dest='/opt/newrelic/plugins/newrelic_mysql_plugin-{{ mon_mysql_version }}/config/plugin.json'
+  tags: ['newrelic', 'newrelic_mysql']
+
+# TODO: Add service to start plugin

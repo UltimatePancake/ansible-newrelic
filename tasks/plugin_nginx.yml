@@ -1,0 +1,35 @@
+---
+# DEBIAN/UBUNTU TASKS
+- name: Nginx | Debian/Ubuntu | Download apt key file
+  get_url: url={{ mon_nginx_key_url }} dest={{ mon_nginx_key_file }}
+  when: ansible_pkg_mgr == 'apt'
+  tags: ['newrelic', 'newrelic_nginx']
+
+- name: Nginx | Debian/Ubuntu | Add apt key
+  apt_key: file={{ mon_nginx_key_file }}
+  when: ansible_pkg_mgr == 'apt'
+  tags: ['newrelic', 'newrelic_nginx']
+
+- name: Nginx | Debian/Ubuntu | Install monitoring agent
+  apt: name='nginx-nr-agent' state=latest update_cache=yes
+  notify: start nginx-agent
+  when: ansible_pkg_mgr == 'apt'
+  tags: ['newrelic', 'newrelic_nginx']
+
+# REDHAT/CENTOS TASKS
+- name: Nginx | RHEL | Install yum repository
+  copy: src='nginx.repo' dest='/etc/yum.repos.d/nginx.repo'
+  notify: start nginx-agent
+  when: ansible_os_family == 'RedHat'
+  tags: ['newrelic', 'newrelic_nginx']
+
+- name: Nginx | RHEL | Install monitoring agent
+  yum: name='nginx-nr-agent' state=latest update_cache=yes
+  when: ansible_os_family == 'RedHat'
+  tags: ['newrelic', 'newrelic_nginx']
+
+# GENERAL TASKS
+- name: Nginx | Configure monitoring agent
+  template: src='nginx-nr-agent.ini.j2' dest='/etc/nginx-nr-agent/nginx-nr-agent.ini'
+  notify: restart nginx-agent
+  tags: ['newrelic', 'newrelic_nginx']
