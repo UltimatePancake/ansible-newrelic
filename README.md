@@ -1,4 +1,4 @@
-#### puppet-newrelic
+#### ansible-newrelic
 New Relic Server, APM, Nginx and MySQL Monitor Ansible role
 
 #### ---USAGE ####
